@@ -1,8 +1,9 @@
 import telebot
 from telebot import types
 import time
+from background import keep_alive
 
-bot = telebot.TeleBot('6626972464:AAG4PihI3LTIxZJcHtaVhPAxceqdM54dDuk') 
+bot = telebot.TeleBot('6510985381:AAFz_WnXUri9VMjSsxxa94ZMuLlzj6xyIko') 
 
 markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 btn1 = types.KeyboardButton('✅ Да')
@@ -51,7 +52,7 @@ def step3(message, user_data):
 
    bot.send_message(message.chat.id, 'У меня часто меняется настроение')
    bot.register_next_step_handler(message, step4, user_data)
-    
+
 
 def step4(message, user_data):
 
@@ -129,14 +130,14 @@ def step14(message, user_data):
      user_data[message.chat.id]['step1'] += 1
    bot.send_message(message.chat.id, 'По утрам я часто чувствую себя разбитым')
    bot.register_next_step_handler(message, step15, user_data)
-   
+
 
 def step15(message, user_data):
    if message.text == '✅ Да':
      user_data[message.chat.id]['step1'] += 1
    bot.send_message(message.chat.id, 'Физические упражнения и спорт меня не привлекают')
    bot.register_next_step_handler(message, step16, user_data)
-   
+
 def step16(message, user_data):
    if message.text == '✅ Да':
      user_data[message.chat.id]['step1'] += 1
@@ -231,25 +232,25 @@ def step30(message, user_data):
    if user_data[message.chat.id]['step1'] < 10:
       bot.send_message(message.chat.id, 'У Вас высокий уровень психологической устойчивости к экстремальным условиям, состояние хорошей адаптированности 😀')
       bot.send_message(message.chat.id, 'Однако не стоит останавливаться на достигнутом! Предлагаю к Вашему вниманию следующие методики, которые смогут повысить вашу психологическую устойчивость!')
-      bot.send_message(message.chat.id, f'1️⃣ Аутогенная медитация  визуализация\n\n{methodics['high1']}')
-      bot.send_message(message.chat.id, f'2️⃣ Мышечное расслабление\n\n{methodics['high2']}')
-      bot.send_message(message.chat.id, f'3️⃣ Когнетивная реструктуризация\n\n{methodics['high3']}')
-      bot.send_message(message.chat.id, f'4️⃣ Мотивация\n\n{methodics['high4']}', reply_markup=markup2)
+      bot.send_message(message.chat.id, f'1️⃣ Аутогенная медитация  визуализация\n\n' + methodics['high1'])
+      bot.send_message(message.chat.id, f'2️⃣ Мышечное расслабление\n\n' + methodics['high2'])
+      bot.send_message(message.chat.id, f'3️⃣ Когнетивная реструктуризация\n\n'+methodics['high3'])
+      bot.send_message(message.chat.id, f'4️⃣ Мотивация\n\n' + methodics['high4'], reply_markup=markup2)
       bot.register_next_step_handler(message, wait, user_data)
 
    elif user_data[message.chat.id]['step1'] > 10 and user_data[message.chat.id]['step1'] < 18:
       bot.send_message(message.chat.id, 'Средний уровень психологической устойчивости к экстремальным условиям, состояние удовлетворительной  адаптированности')
       bot.send_message(message.chat.id, 'Предлагаю к Вашему вниманию методики, которые помогут Вам улучшить стрессоустойчивость')
-      bot.send_message(message.chat.id, f'1️⃣ Техника Фрирайтинг\n\n{methodics['middle1']}')
-      bot.send_message(message.chat.id, f'2️⃣ Упражнение 5 чувств\n\n{methodics['middle2']}')
-      bot.send_message(message.chat.id, f'3️⃣ Дыхательная гимнастика\n\n{methodics['middle3']}', reply_markup=markup2)
+      bot.send_message(message.chat.id, f'1️⃣ Техника Фрирайтинг\n\n' + methodics['middle1'])
+      bot.send_message(message.chat.id, f'2️⃣ Упражнение 5 чувств\n\n' + methodics['middle2'])
+      bot.send_message(message.chat.id, f'3️⃣ Дыхательная гимнастика\n\n' + methodics['middle3'], reply_markup=markup2)
       bot.register_next_step_handler(message, wait, user_data)
 
    else:
       bot.send_message(message.chat.id, '❗Низкая стрессоустойчивость, высокий риск патологических стрессреакций и невротических расстройств, состояние дезадаптации')
       bot.send_message(message.chat.id, 'Предлагаю к Вашему вниманию методики, которые помогут Вам улучшить стрессоустойчивость')
-      bot.send_message(message.chat.id, f'1️⃣ Дыхание по квадрату\n\n{methodics['high1']}')
-      bot.send_message(message.chat.id, f'2️⃣ Упражнение 5 чувств\n\n{methodics['high2']}', reply_markup=markup2)
+      bot.send_message(message.chat.id, f'1️⃣ Дыхание по квадрату\n\n' + methodics['high1'])
+      bot.send_message(message.chat.id, f'2️⃣ Упражнение 5 чувств\n\n' + methodics['high2'], reply_markup=markup2)
       bot.register_next_step_handler(message, wait, user_data)
 
 
@@ -257,9 +258,11 @@ def wait(message, user_data):
    user_data[message.chat.id]['step1'] = 0
 
    if message.text == '🔁 Пройти тест заново':
-      start()
+      start(message)
    else:
       bot.send_message('Вы можете пройти тест заново. Для этого используйте команду /start')
+
+keep_alive()
 
 while True:
     try:
